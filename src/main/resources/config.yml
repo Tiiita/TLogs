@@ -1,0 +1,8 @@
+command-usage: '&7» &cUsage: /logs'
+no-perms: '&cYou do not have permissions for that!'
+
+enabled-logs: '§7» &7You &aenabled &7the logs.'
+disabled-logs: '§7» &7You &cdisabled &7the logs.'
+
+log: '&8[&cLOG&8] &7- &8[&c%server%&8] &7 - &8[&c%time%&8] &7 - &c%player% &7» %message%'
+configLog: '[LOG] - [%server%] - %player% » %message%'

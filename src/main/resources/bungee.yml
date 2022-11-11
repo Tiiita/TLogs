@@ -1,0 +1,3 @@
+name: TLogs
+version: '${project.version}'
+main: net.propvp.tlogs.TLogs
