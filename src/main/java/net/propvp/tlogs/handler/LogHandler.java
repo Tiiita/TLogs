@@ -88,8 +88,7 @@ public class LogHandler implements Listener {
 
         String configLog = plugin.getConfig().color(plugin.getConfig().getString("configLog", "%server%",
                 serverName, "%time%", obj.format(res), "%player%", player.getName(), "%message%", message));
-
-
+        
 
         config.reload();
         config.setString(obj.format(res), configLog);
