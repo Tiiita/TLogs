@@ -1,12 +1,16 @@
 package net.propvp.tlogs.wrapper;
 
+import com.sun.org.apache.xerces.internal.xs.StringList;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import net.propvp.tlogs.TLogs;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -62,9 +66,11 @@ public class ConfigWrapper {
     }
 
 
+
     public String color(String path) {
         return ChatColor.translateAlternateColorCodes('&', path);
     }
+
 
     public String getString(String path) {
         return fileConfiguration.getString(path);
@@ -85,6 +91,11 @@ public class ConfigWrapper {
     public String getString(String path, String placeholder, String replacement, String placeholder2, String replacement2, String placeholder3, String replacement3, String placeholder4, String replacement4) {
         return fileConfiguration.getString(path).replaceAll(placeholder, replacement).replaceAll(placeholder2, replacement2).replaceAll(placeholder3, replacement3).replaceAll(placeholder4, replacement4);
     }
+
+    public List<String> getStringList(String path) {
+        return fileConfiguration.getStringList(path);
+    }
+
     public int getInt(String path) {
         return fileConfiguration.getInt(path);
     }
@@ -96,6 +107,7 @@ public class ConfigWrapper {
     public boolean getBoolean(String path) {
         return fileConfiguration.getBoolean(path);
     }
+
     public void setString(String path, String value) {
         fileConfiguration.set(path, value);
     }
@@ -103,6 +115,7 @@ public class ConfigWrapper {
     public void setBoolean(String path, boolean value) {
         fileConfiguration.set(path, value);
     }
+
     public void setInt(String path, int value) {
         fileConfiguration.set(path, value);
     }

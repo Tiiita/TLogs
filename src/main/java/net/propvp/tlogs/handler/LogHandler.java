@@ -22,9 +22,12 @@ public class LogHandler implements Listener {
 
     TLogs plugin;
     private final HashSet<ProxiedPlayer> playersThatEnabledLogs = new HashSet<>();
+    private boolean logsForConfig;
 
     public LogHandler(TLogs plugin) {
         this.plugin = plugin;
+
+        logsForConfig = true;
     }
 
     @EventHandler
@@ -32,7 +35,9 @@ public class LogHandler implements Listener {
         if (event.getSender() instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
-            saveLogsToConfig(plugin.getLogsConfig(), player, event.getMessage());
+            if (logsForConfig) {
+                saveLogsToConfig(plugin.getLogsConfig(), player, event.getMessage());
+            }
 
             for (ProxiedPlayer onlinePlayer : playersThatEnabledLogs) {
                 sendLog(player, event.getMessage());
@@ -41,29 +46,48 @@ public class LogHandler implements Listener {
     }
 
 
-    public void enableLogs(ProxiedPlayer player) {
+    public void enableLogsForPlayer(ProxiedPlayer player) {
 
         playersThatEnabledLogs.add(player);
-        player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("enabled-logs"))));
+        player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("enabled-logs-for-player"))));
     }
 
-    public void disableLogs(ProxiedPlayer player) {
+    public void disableLogsForPlayer(ProxiedPlayer player) {
 
         playersThatEnabledLogs.remove(player);
-        player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("disabled-logs"))));
+        player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("disabled-logs-for-player"))));
     }
 
     public boolean isViewingLogs(ProxiedPlayer player) {
         return playersThatEnabledLogs.contains(player);
     }
 
-    public void toggleLogs(ProxiedPlayer player) {
+    public void toggleLogsForPlayer(ProxiedPlayer player) {
         if (isViewingLogs(player)) {
-            disableLogs(player);
+            disableLogsForPlayer(player);
         } else {
-            enableLogs(player);
+            enableLogsForPlayer(player);
         }
     }
+
+    public void enableLogsForConfig(ProxiedPlayer player) {
+        logsForConfig = true;
+        player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("enabled-logs-for-config"))));
+    }
+
+    public void disableLogsForConfig(ProxiedPlayer player) {
+        logsForConfig = false;
+        player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("disabled-logs-for-config"))));
+    }
+
+    public void toggleLogsForConfig(ProxiedPlayer player) {
+        if (logsForConfig) {
+            disableLogsForConfig(player);
+        } else {
+            enableLogsForConfig(player);
+        }
+    }
+
 
     private void sendLog(ProxiedPlayer player, String message) {
         String serverName = player.getServer().getInfo().getName();
@@ -88,7 +112,7 @@ public class LogHandler implements Listener {
 
         String configLog = plugin.getConfig().color(plugin.getConfig().getString("configLog", "%server%",
                 serverName, "%time%", obj.format(res), "%player%", player.getName(), "%message%", message));
-        
+
 
         config.reload();
         config.setString(obj.format(res), configLog);
