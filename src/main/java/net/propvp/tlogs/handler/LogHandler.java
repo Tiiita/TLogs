@@ -39,9 +39,7 @@ public class LogHandler implements Listener {
                 saveLogsToConfig(plugin.getLogsConfig(), player, event.getMessage());
             }
 
-            for (ProxiedPlayer onlinePlayer : playersThatEnabledLogs) {
-                sendLog(player, event.getMessage());
-            }
+            sendLogs(player, event.getMessage());
         }
     }
 
@@ -89,8 +87,8 @@ public class LogHandler implements Listener {
     }
 
 
-    private void sendLog(ProxiedPlayer player, String message) {
-        String serverName = player.getServer().getInfo().getName();
+    private void sendLogs(ProxiedPlayer writer, String message) {
+        String serverName = writer.getServer().getInfo().getName();
         DateFormat obj = new SimpleDateFormat("HH:mm:ss");
         Date res = new Date(System.currentTimeMillis());
 
@@ -98,7 +96,7 @@ public class LogHandler implements Listener {
 
             onlinePlayer.sendMessage(new TextComponent(
                     plugin.getConfig().color(plugin.getConfig().getString("log", "%server%",
-                            serverName, "%time%", obj.format(res), "%player%", player.getName(), "%message%", message))));
+                            serverName, "%time%", obj.format(res), "%player%", writer.getName(), "%message%", message))));
         }
     }
 
