@@ -1,14 +1,18 @@
 package net.propvp.tlogs;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.propvp.tlogs.command.LogsCommand;
 import net.propvp.tlogs.handler.LogHandler;
+import net.propvp.tlogs.listener.LoginListener;
 import net.propvp.tlogs.wrapper.ConfigWrapper;
 import net.propvp.tlogs.wrapper.LogFileWrapper;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.logging.Level;
 
 public final class TLogs extends Plugin {
 
@@ -17,6 +21,8 @@ public final class TLogs extends Plugin {
 
     private ConfigWrapper config;
     private LogFileWrapper logFile;
+    private UpdateChecker updateChecker;
+    private String prefix;
 
     @Override
     public void onEnable() {
@@ -33,9 +39,13 @@ public final class TLogs extends Plugin {
 
         logFile = new LogFileWrapper(this, getDataFolder(), "tlogs.log");
 
+        prefix = getConfig().color(getConfig().getString("prefix"));
 
         registerListener();
         registerCommands();
+
+
+      updateChecker = new UpdateChecker(this, 106211);
 
 
     }
@@ -45,6 +55,7 @@ public final class TLogs extends Plugin {
 
         //register all listener here:
         pm.registerListener(this, logHandler);
+        pm.registerListener(this, new LoginListener(this));
     }
 
     private void registerCommands() {
@@ -81,5 +92,13 @@ public final class TLogs extends Plugin {
 
     public LogFileWrapper getLogFile() {
         return logFile;
+    }
+
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 }

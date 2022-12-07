@@ -6,7 +6,7 @@
 
     <groupId>net.propvp</groupId>
     <artifactId>TLogs</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.2</version>
     <packaging>jar</packaging>
 
     <name>TLogs</name>

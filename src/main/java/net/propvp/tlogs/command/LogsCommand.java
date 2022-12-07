@@ -33,7 +33,7 @@ public class LogsCommand extends Command {
 
 
         if (!player.hasPermission("tlogs.toggle") || !player.hasPermission("tlogs.togglesaving")) {
-            player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("no-perms"))));
+            player.sendMessage(new TextComponent(plugin.getPrefix() + " " + plugin.getConfig().color(plugin.getConfig().getString("no-perms"))));
             return;
         }
 
@@ -47,14 +47,14 @@ public class LogsCommand extends Command {
             case "toggle": {
                 if (player.hasPermission("tlogs.toggle")) {
                     logHandler.toggleLogsForPlayer(player);
-                } else player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("no-perms"))));
+                } else player.sendMessage(new TextComponent(plugin.getPrefix() + " " + plugin.getConfig().color(plugin.getConfig().getString("no-perms"))));
                 break;
             }
 
             case "togglesaving": {
                 if (player.hasPermission("tlogs.togglesaving")) {
                     logHandler.toggleLogsForFile(player);
-                } else player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("no-perms"))));
+                } else player.sendMessage(new TextComponent(plugin.getPrefix() + " " + plugin.getConfig().color(plugin.getConfig().getString("no-perms"))));
                 break;
             }
 
