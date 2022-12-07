@@ -4,10 +4,12 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.config.YamlConfiguration;
 import net.md_5.bungee.event.EventHandler;
 import net.propvp.tlogs.TLogs;
 import net.propvp.tlogs.wrapper.ConfigWrapper;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,10 +38,10 @@ public class LogHandler implements Listener {
             ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
             if (logsForConfig) {
-                saveLogsToConfig(plugin.getLogsConfig(), player, event.getMessage());
+                saveLogsToFile(player, event.getMessage());
             }
 
-            sendLogs(player, event.getMessage());
+            sendLog(player, event.getMessage());
         }
     }
 
@@ -68,52 +70,40 @@ public class LogHandler implements Listener {
         }
     }
 
-    public void enableLogsForConfig(ProxiedPlayer player) {
+    public void enableLogsForFile(ProxiedPlayer player) {
         logsForConfig = true;
         player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("enabled-logs-for-config"))));
     }
 
-    public void disableLogsForConfig(ProxiedPlayer player) {
+    public void disableLogsForFile(ProxiedPlayer player) {
         logsForConfig = false;
         player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("disabled-logs-for-config"))));
     }
 
-    public void toggleLogsForConfig(ProxiedPlayer player) {
+    public void toggleLogsForFile(ProxiedPlayer player) {
         if (logsForConfig) {
-            disableLogsForConfig(player);
+            disableLogsForFile(player);
         } else {
-            enableLogsForConfig(player);
+            enableLogsForFile(player);
         }
     }
 
 
-    private void sendLogs(ProxiedPlayer writer, String message) {
+    private void sendLog(ProxiedPlayer writer, String message) {
         String serverName = writer.getServer().getInfo().getName();
         DateFormat obj = new SimpleDateFormat("HH:mm:ss");
         Date res = new Date(System.currentTimeMillis());
+        String log = plugin.getConfig().color(plugin.getConfig().getString("log", "%server%",
+                serverName, "%time%", obj.format(res), "%player%", writer.getName(), "%message%", message));
+
 
         for (ProxiedPlayer onlinePlayer : playersThatEnabledLogs) {
-
-            onlinePlayer.sendMessage(new TextComponent(
-                    plugin.getConfig().color(plugin.getConfig().getString("log", "%server%",
-                            serverName, "%time%", obj.format(res), "%player%", writer.getName(), "%message%", message))));
+            onlinePlayer.sendMessage(new TextComponent(log));
         }
     }
 
 
-    private void saveLogsToConfig(ConfigWrapper config, ProxiedPlayer player, String message) {
-
-
-        String serverName = player.getServer().getInfo().getName();
-        DateFormat obj = new SimpleDateFormat("dd/MM/yyyy HH|mm|ss");
-        Date res = new Date(System.currentTimeMillis());
-
-        String configLog = plugin.getConfig().color(plugin.getConfig().getString("configLog", "%server%",
-                serverName, "%time%", obj.format(res), "%player%", player.getName(), "%message%", message));
-
-
-        config.reload();
-        config.setString(obj.format(res), configLog);
-        config.save();
+    private void saveLogsToFile(ProxiedPlayer player, String message) {
+        plugin.getLogFile().saveLog(player, message);
     }
 }

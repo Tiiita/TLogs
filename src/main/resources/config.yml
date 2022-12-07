@@ -1,15 +1,15 @@
 command-usage:
   - '&cUsage:'
   - '&c- /logs toggle'
-  - '&c- /logs toggleconfig'
-no-perms: '&cYou do not have permissions for that!'
+  - '&c- /logs togglesaving'
+no-perms: '&cYou do not have permission for that!'
 
 enabled-logs-for-player: '§7» &7You &aenabled &7the logs.'
 disabled-logs-for-player: '§7» &7You &cdisabled &7the logs.'
 
-enabled-logs-for-config: '&7» &7Logs are &anow &7stored in the logs config.'
-disabled-logs-for-config: '&7» &7Logs are &cno longer &7stored in the logs config.'
+enabled-logs-for-config: '&7» &7Logs are &anow &7stored in the logs file.'
+disabled-logs-for-config: '&7» &7Logs are &cno longer &7stored in the logs file.'
 
 
 log: '&8[&cLOG&8] &7- &8[&c%server%&8] &7 - &8[&c%time%&8] &7 - &c%player% &7» %message%'
-configLog: '[LOG] - [%server%] - %player% » %message%'
+fileLog: '[LOG] - [%server%] - [%time%] - %player% » %message%'

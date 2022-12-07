@@ -5,6 +5,7 @@ import net.md_5.bungee.api.plugin.PluginManager;
 import net.propvp.tlogs.command.LogsCommand;
 import net.propvp.tlogs.handler.LogHandler;
 import net.propvp.tlogs.wrapper.ConfigWrapper;
+import net.propvp.tlogs.wrapper.LogFileWrapper;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -15,23 +16,23 @@ public final class TLogs extends Plugin {
 
 
     private ConfigWrapper config;
-    private ConfigWrapper logsConfig;
+    private LogFileWrapper logFile;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
 
-
         try {
             loadConfig("config.yml");
-            loadConfig("logs.yml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         config = new ConfigWrapper("config.yml", getDataFolder(), this);
-        logsConfig = new ConfigWrapper("logs.yml", getDataFolder(), this);
         logHandler = new LogHandler(this);
+
+        logFile = new LogFileWrapper(this, getDataFolder(), "tlogs.log");
+
 
         registerListener();
         registerCommands();
@@ -62,9 +63,6 @@ public final class TLogs extends Plugin {
         return config;
     }
 
-    public ConfigWrapper getLogsConfig() {
-        return logsConfig;
-    }
 
     private void loadConfig(String name) throws IOException {
         if (!getDataFolder().exists())
@@ -81,4 +79,7 @@ public final class TLogs extends Plugin {
         }
     }
 
+    public LogFileWrapper getLogFile() {
+        return logFile;
+    }
 }

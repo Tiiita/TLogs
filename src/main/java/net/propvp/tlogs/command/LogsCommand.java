@@ -1,15 +1,11 @@
 package net.propvp.tlogs.command;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.PluginManager;
 import net.propvp.tlogs.TLogs;
 import net.propvp.tlogs.handler.LogHandler;
-
-import java.util.List;
 
 /**
  * @author tiiita_
@@ -35,23 +31,36 @@ public class LogsCommand extends Command {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
 
-        if (!player.hasPermission("tlogs.toggle")) {
+
+        if (!player.hasPermission("tlogs.toggle") || !player.hasPermission("tlogs.togglesaving")) {
             player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("no-perms"))));
             return;
         }
 
-        if (!(args.length == 1)) {
+        if (args.length == 0) {
             sendCommandUsage(player);
             return;
         }
 
-        if (args[0].equalsIgnoreCase("toggle")) {
-            logHandler.toggleLogsForPlayer(player);
 
-        } else if (args[0].equalsIgnoreCase("toggleconfig")) {
-            logHandler.toggleLogsForConfig(player);
+        switch (args[0]) {
+            case "toggle": {
+                if (player.hasPermission("tlogs.toggle")) {
+                    logHandler.toggleLogsForPlayer(player);
+                } else player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("no-perms"))));
+                break;
+            }
 
-        } else sendCommandUsage(player);
+            case "togglesaving": {
+                if (player.hasPermission("tlogs.togglesaving")) {
+                    logHandler.toggleLogsForFile(player);
+                } else player.sendMessage(new TextComponent(plugin.getConfig().color(plugin.getConfig().getString("no-perms"))));
+                break;
+            }
+
+            default: sendCommandUsage(player);
+        }
+
     }
 
     private void sendCommandUsage(ProxiedPlayer player) {
